@@ -3,19 +3,31 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * This stopwatch class implements a simple stopwatch with start, stop, and clear buttons.
+ * It uses swing to accomplish the user interface as well as a Thread for time management.
+ */
+
 public class Stopwatch implements ActionListener, Runnable {
 
     public static void main(String[] args) {
         new Stopwatch();
     }
+
+    // Thread for running stopwatch
     Thread thread;
 
+    // Running flag
     boolean running = false;
+
+    // Time elapsed (ms)
     float time = 0;
 
-    JLabel label;
-    JButton startButton, resetButton;
+    // Global user interface components
+    private JLabel label;
+    private JButton startButton;
 
+    // Constructor
     public Stopwatch() {
         initializeInterface();
 
@@ -23,6 +35,7 @@ public class Stopwatch implements ActionListener, Runnable {
         thread.start();
     }
 
+    // Action performed method for handling button events
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -35,13 +48,14 @@ public class Stopwatch implements ActionListener, Runnable {
                 return;
             }
 
-            startButton.setText("Stop");
+            startButton.setText("Start");
             return;
         }
 
         reset();
     }
 
+    // Method for formatting elapsed time as string (mm:ss:SSS)
     private String getFormattedTime() {
         int totalSeconds = (int) (time / 1000);
         int minutes = totalSeconds / 60;
@@ -51,12 +65,14 @@ public class Stopwatch implements ActionListener, Runnable {
         return String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + ":" + String.format("%03d", milliseconds);
     }
 
+    // Method for resetting stopwatch
     private void reset() {
         time = 0;
         label.setText("00:00:000");
         running = false;
     }
 
+    // Run method for Thread
     @Override
     public void run() {
         while (true){
@@ -75,47 +91,49 @@ public class Stopwatch implements ActionListener, Runnable {
         }
     }
 
+    // Method to initialize user interface
     private void initializeInterface() {
         // Font
         Font font = new Font("Dialogue", Font.PLAIN, 40);
 
-        // Frame
+        // JFrame
         JFrame frame = new JFrame("Stopwatch");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setSize(400,200);
 
-        // Main Panel
+        // Main JPanel
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(1,2));
 
-        // Button Panel
+        // Button JPanel
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(2,1));
 
-        // Buttons
+        // JButtons
         startButton = new JButton("Start");
         startButton.setFont(font);
         startButton.addActionListener(this);
         buttonPanel.add(startButton);
 
-        resetButton = new JButton("Reset");
+        JButton resetButton = new JButton("Reset");
         resetButton.setFont(font);
         resetButton.addActionListener(this);
         buttonPanel.add(resetButton);
 
         panel.add(buttonPanel);
 
-        // Label Panel
+        // Label JPanel
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new BorderLayout());
 
-        // Label
+        // JLabel
         label = new JLabel("00:00:000");
         label.setFont(font);
         labelPanel.add(label, BorderLayout.EAST);
-
         panel.add(labelPanel);
+
+        // Add main panel to frame and make visible
         frame.add(panel);
         frame.setVisible(true);
     }
