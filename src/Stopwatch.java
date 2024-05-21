@@ -11,11 +11,18 @@ public class Stopwatch implements ActionListener, Runnable {
     boolean running = false;
     float time = 0;
     JLabel label;
-
+    JButton button;
     @Override
     public void actionPerformed(ActionEvent e) {
         running = !running;
-        System.out.println(running);
+        if(running) {
+            button.setText("Stop");
+
+        }
+        else {
+            button.setText("Start");
+            time = 0;
+        }
     }
 
     public Stopwatch() {
@@ -34,15 +41,22 @@ public class Stopwatch implements ActionListener, Runnable {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(1,2));
 
-        JButton button = new JButton("Start/Stop");
+        Font font = new Font("Dialogue", Font.PLAIN, 40);
+
+        button = new JButton("Start");
         panel.add(button);
+
+        button.setFont(font);
+
 
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new FlowLayout(FlowLayout.RIGHT,0,75));
 
+
         label = new JLabel("0");
         labelPanel.add(label);
         panel.add(labelPanel);
+        label.setFont(font);
 
         frame.add(panel);
         frame.setVisible(true);
