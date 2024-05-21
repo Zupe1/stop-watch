@@ -3,13 +3,30 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Stopwatch {
+public class Stopwatch implements ActionListener, Runnable {
     public static void main(String[] args) {
         new Stopwatch();
-
     }
+    Thread thread;
+    boolean running = false;
+    float time = 0;
+    JLabel label;
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        running = !running;
+        System.out.println(running);
+    }
+
     public Stopwatch() {
-        JFrame frame = new JFrame("text");
+        initializeInterface();
+
+        thread = new Thread(this);
+        thread.start();
+    }
+
+    private void initializeInterface() {
+        JFrame frame = new JFrame("Stopwatch");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setSize(400,200);
@@ -23,39 +40,29 @@ public class Stopwatch {
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new FlowLayout(FlowLayout.RIGHT,0,75));
 
-        JLabel label = new JLabel("1:23:342");
+        label = new JLabel("0");
         labelPanel.add(label);
         panel.add(labelPanel);
 
         frame.add(panel);
         frame.setVisible(true);
 
-        boolean isOn = false;
+        button.addActionListener(this);
+    }
 
-        float time = 0;
-
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                isOn = !isOn;
-            }
-
-        });
+    @Override
+    public void run() {
         while (true){
-            if(isOn){
-                try {
-                    Thread.sleep(10);
+            try {
+                Thread.sleep(10);
+                if(running){
                     time += 10;
                     label.setText(String.valueOf(time));
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 }
-
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
 
         }
-
     }
-
-
 }
