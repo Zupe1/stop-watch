@@ -60,15 +60,18 @@ public class Stopwatch implements ActionListener, Runnable {
         int totalSeconds = (int) (time / 1000);
         int minutes = totalSeconds / 60;
         int seconds = totalSeconds % 60;
-        int milliseconds = (int) (time % 1000);
+        int milliseconds = (int) (time % 1000) / 10;
 
-        return String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + ":" + String.format("%03d", milliseconds);
+        if (minutes==0 ) {
+            return String.format("%02d", seconds) + ":" + String.format("%02d", milliseconds);
+        }
+        return String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + ":" + String.format("%02d", milliseconds);
     }
 
     // Method for resetting stopwatch
     private void reset() {
         time = 0;
-        label.setText("00:00:000");
+        label.setText("0:00");
         running = false;
     }
 
@@ -77,7 +80,7 @@ public class Stopwatch implements ActionListener, Runnable {
     public void run() {
         while (true){
             try {
-                Thread.sleep(10);
+                Thread.sleep(5);
 
             } catch (InterruptedException e) {
 
@@ -85,7 +88,7 @@ public class Stopwatch implements ActionListener, Runnable {
             }
 
             if (running){
-                time += 10.f;
+                time += 5.f;
                 label.setText(getFormattedTime());
             }
         }
@@ -128,7 +131,7 @@ public class Stopwatch implements ActionListener, Runnable {
         labelPanel.setLayout(new BorderLayout());
 
         // JLabel
-        label = new JLabel("00:00:000");
+        label = new JLabel("0:00");
         label.setFont(font);
         labelPanel.add(label, BorderLayout.EAST);
         panel.add(labelPanel);
