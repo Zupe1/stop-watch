@@ -62,10 +62,18 @@ public class Stopwatch implements ActionListener, Runnable {
         int seconds = totalSeconds % 60;
         int milliseconds = (int) (time % 1000) / 10;
 
-        if (minutes==0 ) {
-            return String.format("%02d", seconds) + ":" + String.format("%02d", milliseconds);
+        if (minutes == 0) {
+            if (seconds / 10 == 0) {
+                return String.format("%01d:%02d", seconds, milliseconds);
+            }
+            return String.format("%02d:%02d", seconds, milliseconds);
         }
-        return String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + ":" + String.format("%02d", milliseconds);
+
+        if (minutes / 10 == 0) {
+            return String.format("%01d:%02d:%02d", minutes, seconds, milliseconds);
+        }
+
+        return String.format("%02d:%02d:%02d", minutes, seconds, milliseconds);
     }
 
     // Method for resetting stopwatch
